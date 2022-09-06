@@ -1,6 +1,7 @@
 import React,{useState}  from 'react';
 import {useDispatch} from 'react-redux';
-import {add_post} from '../reducers/index';
+// import {add_post} from '../reducers/index';
+import {addPost} from '../reducers/index';
 function Postform() {
 
     const dispatch = useDispatch();
@@ -15,8 +16,9 @@ function Postform() {
 
     const onSubmitForm = (e) => {
         e.preventDefault();
-        dispatch(add_post(text));
+        dispatch(addPost(text));
         //이제 액션 타입을 넣어 줄 필요가 없다. 타입으로 구분하는 게 아니라 함수로 구분하기 때문
+        //액션 타입은 내부적으로 createSlice의 name와 함수명을 섞어서 만들어줌
         //데이터만 넣어주면된다. 그러면 내부적으로 action.payload에 들어간다.
         setText('');
     };
