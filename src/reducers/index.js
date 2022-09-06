@@ -1,26 +1,26 @@
-const initialState = {posts:['default Post']};
-//state 선언
+import { createSlice } from '@reduxjs/toolkit'
 
-export const ADD_POST ='ADD_POST';
-//액션 타입 변수화
 
-function reducer (state=initialState,action){
-    
-switch(action.type){
-    
-case ADD_POST:
+export const counterSlice = createSlice({
 
-return{posts:[...state.posts,action.data]};
-    
-default:
-        return state;}
-    }
+name:'post',
+//reducer이름
 
-    //reducer는 현재 state값과 action을 인자로 받음
-    //action의 타입과 데이터에 따라 새로운 state들을 만들어내는 함수임
-    //history를 남기기 위해 불변성을 지켜주어야함. immer라는 모듈을 사용하면 지키지 않아도됨
-    
-export default reducer;
+initialState:{posts:['default Post']},
+
+reducers:{
+
+add_post:(state,action)=>{state.posts.push(action.payload)}
+//다른 곳에서 디스패치할 때에는 1항은 생략하고 2항의 payload로 들어감.
+
+}
+//기존의 reducer과는 다르게 함수형이고, immer가 내장되어 있어 불변성 지킬 필요가 없음
+});
+
+export const { add_post } = counterSlice.actions
+//정의된 함수들을 내보내줘야함
+
+export default counterSlice.reducer;
 
 
 

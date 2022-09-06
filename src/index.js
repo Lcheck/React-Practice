@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 //configuresotre이 return 값으로 store객체를 반환하므로 ()로 실행시켜줬음
 root.render(
   <div>
-    <Provider store={store()}>
+    <Provider store={store}>
   <App/>
   </Provider>
   </div>

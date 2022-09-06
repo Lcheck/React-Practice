@@ -1,6 +1,6 @@
 import React,{useState}  from 'react';
 import {useDispatch} from 'react-redux';
-import {ADD_POST} from '../reducers/index';
+import {add_post} from '../reducers/index';
 function Postform() {
 
     const dispatch = useDispatch();
@@ -15,10 +15,12 @@ function Postform() {
 
     const onSubmitForm = (e) => {
         e.preventDefault();
-        dispatch({type:ADD_POST,data:text});
+        dispatch(add_post(text));
+        //이제 액션 타입을 넣어 줄 필요가 없다. 타입으로 구분하는 게 아니라 함수로 구분하기 때문
+        //데이터만 넣어주면된다. 그러면 내부적으로 action.payload에 들어간다.
         setText('');
     };
-    //제출시 addpost타입과 text를 액션 객체에 담아 보냄
+  
     
     return (
 <>
