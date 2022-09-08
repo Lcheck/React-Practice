@@ -1,15 +1,17 @@
 import { createSlice,createAsyncThunk } from '@reduxjs/toolkit'
+const axios = require('axios').default;
 
 const addPost = createAsyncThunk('counterSlice/addPost',async(text)=>{
 //1항은 액션명, 2항엔 비동기 처리문이 들어있는 콜백함수를 넣어준다. 콜백의 인자로 data를 전달 받을 수 있음
 
-const resp=await fetch('https://api.countapi.xyz/hit/opesaljkdfslkjfsadf.com/visits')
-//매번 요청할때마다 1씩 증가하는 숫자를 반환하는 api
+const result = await axios.post('http://localhost:3065/post',{text:text},{withCredentials:true})
+//백엔드 서버에 post 요청을 보내 post테이블에 text가 담긴 열을 하나 생성
+//데이터는 객체로 보내줘야함 객체의 프로퍼티명이 백엔드 req.body의 이름이 되기 때문에 프론트-백엔드에서 맞춰줘야함
 
-const data=await resp.json();
-//json 형태로 변환
+return result.data.text;
+//result는 json 객체로 반환된다.
+//return 값은 action.payload에 들어감
 
-return `Num:${data.value} Text:${text}`;
 })
 
 export const counterSlice = createSlice({
