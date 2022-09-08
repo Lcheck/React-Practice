@@ -4,7 +4,7 @@ const axios = require('axios').default;
 const addPost = createAsyncThunk('counterSlice/addPost',async(text)=>{
 //1항은 액션명, 2항엔 비동기 처리문이 들어있는 콜백함수를 넣어준다. 콜백의 인자로 data를 전달 받을 수 있음
 
-const result = await axios.post('http://localhost:3065/post',{text:text},{withCredentials:true})
+const result = await axios.post('http://localhost:3065/post',{text:text})
 //백엔드 서버에 post 요청을 보내 post테이블에 text가 담긴 열을 하나 생성
 //데이터는 객체로 보내줘야함 객체의 프로퍼티명이 백엔드 req.body의 이름이 되기 때문에 프론트-백엔드에서 맞춰줘야함
 
@@ -17,7 +17,7 @@ return result.data.text;
 const loadPost = createAsyncThunk('counterSlice/loadPost',async()=>{
 //게시글 불러오기
     
-    const result = await axios.get('http://localhost:3065/posts',{withCredentials:true})
+    const result = await axios.get('http://localhost:3065/posts')
 
     console.log(result)
 
