@@ -14,6 +14,17 @@ return result.data.text;
 
 })
 
+const loadPost = createAsyncThunk('counterSlice/loadPost',async()=>{
+//게시글 불러오기
+    
+    const result = await axios.get('http://localhost:3065/posts',{withCredentials:true})
+
+    console.log(result)
+
+    return result.data;
+
+    
+    })
 export const counterSlice = createSlice({
 
 name:'post',
@@ -54,6 +65,23 @@ builder.addCase(addPost.rejected, (state,action)=>{
 state.state='Fail';
 
 })
+builder.addCase(loadPost.pending, (state,action)=>{
+
+state.state='Loading';
+
+})
+builder.addCase(loadPost.fulfilled, (state,action)=>{
+    
+state.state='Sucess';
+action.payload.map((i)=>state.posts.push(i.text));
+//posts에 불러온 게시글 객체대입
+
+})
+builder.addCase(loadPost.rejected, (state,action)=>{
+    
+state.state='Fail';
+
+})
 
 }
 
@@ -62,7 +90,7 @@ state.state='Fail';
 
 export const { add_post } = counterSlice.actions
 //정의된 함수들을 내보내줘야함
-export {addPost};
+export {addPost,loadPost};
 
 export default counterSlice.reducer;
 
