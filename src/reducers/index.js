@@ -1,4 +1,6 @@
-import { createSlice,createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice,createAsyncThunk,current } from '@reduxjs/toolkit'
+//리덕스의 현재 state를 console.log로 출력시 proxy객체로 나와 확인이 어려웠다. 이럴땐 current 모듈을 사용하면 된다.
+
 const axios = require('axios').default;
 
 const addPost = createAsyncThunk('counterSlice/addPost',async(text)=>{
@@ -8,9 +10,18 @@ const result = await axios.post('http://localhost:3065/post',{text:text})
 //백엔드 서버에 post 요청을 보내 post테이블에 text가 담긴 열을 하나 생성
 //데이터는 객체로 보내줘야함 객체의 프로퍼티명이 백엔드 req.body의 이름이 되기 때문에 프론트-백엔드에서 맞춰줘야함
 
-return result.data.text;
+return result.data;
 //result는 json 객체로 반환된다.
 //return 값은 action.payload에 들어감
+
+})
+const deletePost = createAsyncThunk('counterSlice/deletePost',async(id)=>{
+
+
+const result = await axios.delete(`http://localhost:3065/post/${id}`)
+
+//result = {data:{id:'number'}}
+return Number(result.data.id);
 
 })
 
@@ -19,7 +30,7 @@ const loadPost = createAsyncThunk('counterSlice/loadPost',async()=>{
     
     const result = await axios.get('http://localhost:3065/posts')
 
-    console.log(result)
+  
 
     return result.data;
 
@@ -30,7 +41,7 @@ export const counterSlice = createSlice({
 name:'post',
 //reducer이름
 
-initialState:{state:'',posts:['default Post']},
+initialState:{state:'',posts:[{id:0,content:'default Post'},]},
 
 reducers:{
 
@@ -57,7 +68,13 @@ state.state='Loading';
 builder.addCase(addPost.fulfilled, (state,action)=>{
     
 state.state='Sucess';
-state.posts.push(action.payload);
+
+// const addedPost=state.posts.find(e=>e.id===action.payload.id)
+// //일단 내가 쓴 게시글의 id랑 일치하는 게시물을 찾는다.
+// -> 불가능함. 내가 방금 쓴 게시글은 state.posts에 들어있지 않다.
+
+
+state.posts.unshift(action.payload);
 
 })
 builder.addCase(addPost.rejected, (state,action)=>{
@@ -65,19 +82,40 @@ builder.addCase(addPost.rejected, (state,action)=>{
 state.state='Fail';
 
 })
+
 builder.addCase(loadPost.pending, (state,action)=>{
 
 state.state='Loading';
 
 })
 builder.addCase(loadPost.fulfilled, (state,action)=>{
-    
+ 
 state.state='Sucess';
-action.payload.map((i)=>state.posts.push(i.text));
+action.payload.map((i)=>state.posts.unshift(i));
 //posts에 불러온 게시글 객체대입
+//unshift로 최신게시글이 앞에 오도록 채워넣는다.
 
 })
 builder.addCase(loadPost.rejected, (state,action)=>{
+    
+state.state='Fail';
+
+})
+
+builder.addCase(deletePost.pending, (state,action)=>{
+
+state.state='Loading';
+
+})
+builder.addCase(deletePost.fulfilled, (state,action)=>{
+    
+state.state='Sucess';
+
+state.posts=state.posts.filter(i=>i.id!==action.payload)
+//삭제한 게시글 id와 다른 게시글들만 모아 배열을 다시만들어 posts에 대입한다 -> 해당 id를 가진 게시글을 삭제한다
+
+})
+builder.addCase(deletePost.rejected, (state,action)=>{
     
 state.state='Fail';
 
@@ -90,7 +128,7 @@ state.state='Fail';
 
 export const { add_post } = counterSlice.actions
 //정의된 함수들을 내보내줘야함
-export {addPost,loadPost};
+export {addPost,loadPost,deletePost};
 
 export default counterSlice.reducer;
 
