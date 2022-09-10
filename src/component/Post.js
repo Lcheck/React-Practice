@@ -17,7 +17,7 @@ function Post(props) {
     return (
       <>
       <div style={{'display':'inline-block','color':'red','width':'200px','height':'20px','border':'solid 2px black','margin':'2px'}}>
-        {post.content}
+        {post.text}
         
         </div>
         <button onClick={onClickDeleteButton}>삭제</button>
