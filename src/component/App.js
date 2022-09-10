@@ -25,7 +25,7 @@ const App = () =>{
     <>
     {state}
     <Postform/>
-    {posts.map((item,index)=><Post content={item}/>)}
+    {posts.map((item,index)=><Post post={item}/>)}
     </>);
 }
 
