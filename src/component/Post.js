@@ -49,17 +49,48 @@ function Post(props) {
 //액션에 1개 이상의 인자를 넘겨 줄 때에는 객체로 넘겨주어야한다! 액션 함수의 1항에만 전달값을 넣어줄수있기때문
     return (
       <>
+      <div style={{
+                    'display':'flex',
+                   'width':'220px',
+                   'flex-direction':'column',
+                   'justify-content':'center',
+                   'align-items':'center',
+                   'margin-top':'5px',}}>
+      {updateMode?
       
-      {updateMode?(<form action='' onSubmit={(e)=>{e.preventDefault(); dispatch(updatePost({id:post.id,text:text})); setUpdateMode(false)}}>
+(<form action='' onSubmit={(e)=>{e.preventDefault(); dispatch(updatePost({id:post.id,text:text})); setUpdateMode(false)}}>
 <input type='text' value={text} onChange={onChangeText}/>
 <button type='submit'>입력</button>
-</form>):<div style={{'display':'inline-block','color':'red','width':'200px','height':'20px','border':'solid 2px black','margin':'2px'}}>
+</form>):
+
+<div style={{'display':'inline-block',
+                      'background':'cadetblue',
+                      'color':'white',
+                      'width':'200px',
+                      'border-radius':'5px',
+                      'margin':'2px',
+                      'padding':'5px'}}>
         
         {post.text}
         
         </div>}
+        <div style={{  'display':'flex',
+                      'justify-content':'center',
+                      'background':'green',
+                      'color':'white',
+                      'width':'200px',
+                      'border-radius':'5px',
+                      'margin':'2px',
+                      'margin-top':'0px',
+                      'padding':'5px'}}>
+        <button>좋아요</button>
+        <button onClick={onClickUpdateToggleButton}>{updateMode?'수정취소':'수정'}</button>
         <button onClick={onClickDeleteButton}>삭제</button>
-        <button onClick={onClickUpdateToggleButton}>수정</button>
+        <button>신고</button>
+        </div>
+
+
+        </div>
        </>
 
       );

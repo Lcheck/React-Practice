@@ -51,7 +51,7 @@ export const counterSlice = createSlice({
 name:'post',
 //reducer이름
 
-initialState:{updateMode:false,state:'',posts:[{id:0,content:'default Post'},]},
+initialState:{updateMode:false,state:'',posts:[]},
 
 reducers:{
 
