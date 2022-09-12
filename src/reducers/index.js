@@ -36,16 +36,25 @@ const loadPost = createAsyncThunk('counterSlice/loadPost',async()=>{
 
     
     })
+const updatePost = createAsyncThunk('counterSlice/updatePost',async(data)=>{
+
+
+    const result = await axios.post(`http://localhost:3065/post/${data.id}`,{text:data.text})
+
+   
+    return result.data;
+
+    
+    })
 export const counterSlice = createSlice({
 
 name:'post',
 //reducer이름
 
-initialState:{state:'',posts:[{id:0,content:'default Post'},]},
+initialState:{updateMode:false,state:'',posts:[{id:0,content:'default Post'},]},
 
 reducers:{
 
-// add_post:(state,action)=>{state.posts.push(action.payload)}
 
 //다른 곳에서 디스패치할 때에는 1항은 생략하고 2항의 payload로 들어감.
 //내부에 액션 크리에이터가 있어서 액션명을 생략해도됨
@@ -68,10 +77,6 @@ state.state='Loading';
 builder.addCase(addPost.fulfilled, (state,action)=>{
     
 state.state='Sucess';
-
-// const addedPost=state.posts.find(e=>e.id===action.payload.id)
-// //일단 내가 쓴 게시글의 id랑 일치하는 게시물을 찾는다.
-// -> 불가능함. 내가 방금 쓴 게시글은 state.posts에 들어있지 않다.
 
 
 state.posts.unshift(action.payload);
@@ -104,23 +109,40 @@ state.state='Fail';
 
 builder.addCase(deletePost.pending, (state,action)=>{
 
+    state.state='Loading';
+    
+    })
+    builder.addCase(deletePost.fulfilled, (state,action)=>{
+        
+    state.state='Sucess';
+    
+    state.posts=state.posts.filter(i=>i.id!==action.payload)
+    //삭제한 게시글 id와 다른 게시글들만 모아 배열을 다시만들어 posts에 대입한다 -> 해당 id를 가진 게시글을 삭제한다
+    
+    })
+    builder.addCase(deletePost.rejected, (state,action)=>{
+        
+    state.state='Fail';
+    
+    })
+
+builder.addCase(updatePost.pending, (state,action)=>{
+
 state.state='Loading';
 
 })
-builder.addCase(deletePost.fulfilled, (state,action)=>{
+builder.addCase(updatePost.fulfilled, (state,action)=>{
     
 state.state='Sucess';
-
-state.posts=state.posts.filter(i=>i.id!==action.payload)
-//삭제한 게시글 id와 다른 게시글들만 모아 배열을 다시만들어 posts에 대입한다 -> 해당 id를 가진 게시글을 삭제한다
+let postId = state.posts.findIndex(i=>i.id===action.payload.id) //수정전  게시글의 인덱스를 찾는다.
+state.posts[postId].text=action.payload.text //수정전 게시글의 text를 수정 후 text와 일치시킨다
 
 })
-builder.addCase(deletePost.rejected, (state,action)=>{
+builder.addCase(updatePost.rejected, (state,action)=>{
     
 state.state='Fail';
 
 })
-
 }
 
 
@@ -128,7 +150,7 @@ state.state='Fail';
 
 export const { add_post } = counterSlice.actions
 //정의된 함수들을 내보내줘야함
-export {addPost,loadPost,deletePost};
+export {addPost,loadPost,deletePost,updatePost};
 
 export default counterSlice.reducer;
 
