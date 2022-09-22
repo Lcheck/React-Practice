@@ -2,11 +2,11 @@ import { createSlice,createAsyncThunk,current } from '@reduxjs/toolkit'
 //리덕스의 현재 state를 console.log로 출력시 proxy객체로 나와 확인이 어려웠다. 이럴땐 current 모듈을 사용하면 된다.
 
 const axios = require('axios').default;
-
+axios.defaults.baseURL='http://43.201.58.69:80';
 const addPost = createAsyncThunk('counterSlice/addPost',async(text)=>{
 //1항은 액션명, 2항엔 비동기 처리문이 들어있는 콜백함수를 넣어준다. 콜백의 인자로 data를 전달 받을 수 있음
 
-const result = await axios.post('http://localhost:3065/post',{text:text})
+const result = await axios.post('/post',{text:text})
 //백엔드 서버에 post 요청을 보내 post테이블에 text가 담긴 열을 하나 생성
 //데이터는 객체로 보내줘야함 객체의 프로퍼티명이 백엔드 req.body의 이름이 되기 때문에 프론트-백엔드에서 맞춰줘야함
 
@@ -18,7 +18,7 @@ return result.data;
 const deletePost = createAsyncThunk('counterSlice/deletePost',async(id)=>{
 
 
-const result = await axios.delete(`http://localhost:3065/post/${id}`)
+const result = await axios.delete(`/post/${id}`)
 
 //result = {data:{id:'number'}}
 return Number(result.data.id);
@@ -28,7 +28,7 @@ return Number(result.data.id);
 const loadPost = createAsyncThunk('counterSlice/loadPost',async()=>{
 //게시글 불러오기
     
-    const result = await axios.get('http://localhost:3065/posts')
+    const result = await axios.get('/posts')
 
   
 
@@ -39,7 +39,7 @@ const loadPost = createAsyncThunk('counterSlice/loadPost',async()=>{
 const updatePost = createAsyncThunk('counterSlice/updatePost',async(data)=>{
 
 
-    const result = await axios.post(`http://localhost:3065/post/${data.id}`,{text:data.text})
+    const result = await axios.post(`/post/${data.id}`,{text:data.text})
 
    
     return result.data;
