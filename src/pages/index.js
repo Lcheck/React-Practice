@@ -1,12 +1,13 @@
 import React,{useEffect} from 'react';
-import Post from './Post.js'
-import Postform from './Postform.js';
+import Post from '../component/Post.js'
+import Postform from '../component/Postform.js';
+import AppLayout from '../component/AppLayout.js';
 import { useSelector,useDispatch } from 'react-redux';
 import { loadPost } from '../reducers/index.js';
 
 
 
-const App = () =>{
+const Home = () =>{
     const dispatch=useDispatch()
     const posts = useSelector(state=>state.posts)
             //useSelector로 posts state 끌어다쓰기
@@ -23,11 +24,13 @@ const App = () =>{
     return(
     
     <>
+    <AppLayout>
     {state}
     <Postform/>
     {posts.map((item,index)=><Post post={item}/>)}
+    </AppLayout>
     </>);
 }
 
 
-export default App;
+export default Home;
