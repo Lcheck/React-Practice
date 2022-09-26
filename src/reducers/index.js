@@ -2,7 +2,7 @@ import { createSlice,createAsyncThunk,current } from '@reduxjs/toolkit'
 //리덕스의 현재 state를 console.log로 출력시 proxy객체로 나와 확인이 어려웠다. 이럴땐 current 모듈을 사용하면 된다.
 
 const axios = require('axios').default;
-axios.defaults.baseURL='http://43.201.58.69:80';
+axios.defaults.baseURL='http://localhost:3065';
 const addPost = createAsyncThunk('counterSlice/addPost',async(text)=>{
 //1항은 액션명, 2항엔 비동기 처리문이 들어있는 콜백함수를 넣어준다. 콜백의 인자로 data를 전달 받을 수 있음
 
