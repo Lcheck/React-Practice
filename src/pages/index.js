@@ -4,6 +4,7 @@ import Postform from '../component/Postform.js';
 import AppLayout from '../component/AppLayout.js';
 import { useSelector,useDispatch } from 'react-redux';
 import { loadPost } from '../reducers/index.js';
+import DropDown from '../component/DropDown.js';
 
 
 
@@ -25,6 +26,7 @@ const Home = () =>{
     
     <>
     <AppLayout>
+    <DropDown/>
     {state}
     <Postform/>
     {posts.map((item,index)=><Post post={item}/>)}
